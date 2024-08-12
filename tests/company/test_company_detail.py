@@ -16,9 +16,9 @@ def test_create_db(portal: BlockingPortal):
 
         await Language.bulk_create(
             [
-                Language(id=1, full_name="korean", short_name="ko"),
-                Language(id=2, full_name="english", short_name="en"),
-                Language(id=3, full_name="chinese", short_name="cn"),
+                Language(id=1, name="ko"),
+                Language(id=2, name="en"),
+                Language(id=3, name="cn"),
             ]
         )
         await CompanyLanguage.bulk_create(

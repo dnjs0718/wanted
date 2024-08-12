@@ -31,7 +31,7 @@ class LanguageValidatorMiddleware(BaseHTTPMiddleware):
 
             if not (
                 language := await Language.get_or_none(
-                    short_name=headers.get("x-wanted-language")
+                    name=headers.get("x-wanted-language")
                 )
             ):
                 return JSONResponse(

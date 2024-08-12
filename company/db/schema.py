@@ -12,8 +12,7 @@ class Company(Model, BaseMixin):
 
 
 class Language(Model, BaseMixin):
-    full_name = fields.CharField(max_length=255)
-    short_name = fields.CharField(max_length=100)
+    name = fields.CharField(max_length=30)
 
     class Meta:
         table = "languages"
