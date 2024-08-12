@@ -16,16 +16,16 @@ async def company_search(request: Request, query: str):
     """
     # Author
     - 원재연
-    
+
     # Description
     - 회사명 자동완성
-    
+
     # Request Header
     - x-wanted-language : str = 원하는 언어
-    
+
     # Request Query Parameter
     - query : str = 회사명
-    
+
     # Response
     ```
     [
@@ -34,7 +34,7 @@ async def company_search(request: Request, query: str):
         }
     ]
     ```
-    
+
     # Error
     - 401 : 사용 언어를 헤더에 담지 않았을 때
     - 404 : 사용 언어를 지원하지 않을 때

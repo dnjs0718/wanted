@@ -2,6 +2,7 @@ from collections.abc import Callable
 from re import match
 
 from fastapi import Request
+from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -20,19 +21,22 @@ class LanguageValidatorMiddleware(BaseHTTPMiddleware):
         headers = request.headers
         url = request.url.path
         request.state.language = None
-
         if url not in EXCEPT_LIST:
             if (
                 url in LANGUAGE_REQUIRED_LIST or await url_check(url)
             ) and "x-wanted-language" not in headers:
-                return JSONResponse(status_code=401, content="language required")
+                return JSONResponse(
+                    status_code=401, content={"detail": "language required"}
+                )
 
             if not (
                 language := await Language.get_or_none(
                     short_name=headers.get("x-wanted-language")
                 )
             ):
-                return JSONResponse(status_code=404, content="language not found")
+                return JSONResponse(
+                    status_code=404, content={"detail": "language not found"}
+                )
 
             request.state.language = language
 

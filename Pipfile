@@ -13,6 +13,8 @@ aerich = "*"
 pytest = "*"
 tortoise-cli = "*"
 black = "*"
+starlette-testclient = "*"
+anyio = {extras = ["trio"], version = "*"}
 
 [requires]
 python_version = "3.11"
