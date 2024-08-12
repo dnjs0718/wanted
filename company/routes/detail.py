@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from company.db.schema import CompanyLanguage, TagLanguage
+from company.db.schema import CompanyLanguage, TagLanguage, Company
 
 
 router = APIRouter()
@@ -40,19 +40,28 @@ async def company_detail(request: Request, company_name: str):
     - 401 : 사용 언어를 헤더에 담지 않았을 때
     - 404 : 사용 언어를 지원하지 않을 때 (language not found)
     - 404 : 회사를 찾을 수 없을 때 (company not found)
+    - 404 : 회사가 해당언어를 지원하지 않을 때 (company_language not found)
     """
     language = request.state.language
+
     if not (
-        company_language := await CompanyLanguage.get_or_none(
-            language=language, name=company_name
-        ).select_related("company")
+        company := await Company.get_or_none(
+            company_languages__name=company_name
+        ).prefetch_related("company_languages")
     ):
         return JSONResponse(status_code=404, content={"detail": "company not found"})
 
-    tags = (
-        await TagLanguage.filter(
-            tag__company_tags__company=company_language.company, language=language
+    if not (
+        company_language := await CompanyLanguage.get_or_none(
+            company=company, language=language
         )
+    ):
+        return JSONResponse(
+            status_code=404, content={"detail": "company_language not found"}
+        )
+
+    tags = (
+        await TagLanguage.filter(tag__company_tags__company=company, language=language)
         .prefetch_related("tag__company_tags__company")
         .values_list("name", flat=True)
     )

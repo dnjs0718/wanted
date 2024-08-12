@@ -14,9 +14,9 @@ from main import create_app
 def client() -> Generator:
     os.environ["API_ENV"] = "test"
 
-    db_url = os.environ['TEST_DB_URL']
+    db_url = os.environ["TEST_DB_URL"]
 
-    if os.environ['API_ENV'] != "test":
+    if os.environ["API_ENV"] != "test":
         msg = "API_ENV must be 'test'"
         raise Exception(msg)
 
@@ -39,9 +39,9 @@ def client() -> Generator:
 
     with TestClient(create_app()) as c:
         yield c
-        
+
     finalizer()
-    
+
 
 @pytest.fixture(scope="module")
 def portal(client: TestClient) -> BlockingPortal:
