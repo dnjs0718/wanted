@@ -3,23 +3,32 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware import Middleware
 from uvicorn import run
 
-
-app = FastAPI(
-    middleware=[
-        Middleware(
-            CORSMiddleware,
-            allow_origins=["*"],
-            allow_credentials=True,
-            allow_methods=["*"],
-            allow_headers=["*"],
-        )
-    ]
-)
+from common.config.db_conn import rdb
+from common.config.middleware import LanguageValidatorMiddleware
+from company.urls import include_routers as company_routers
 
 
-@app.get("/")
-async def root():
-    return {"message": "Health Check Success"}
+def create_app():
+    app = FastAPI(
+        middleware=[
+            Middleware(
+                CORSMiddleware,
+                allow_origins=["*"],
+                allow_credentials=True,
+                allow_methods=["*"],
+                allow_headers=["*"],
+            ),
+            Middleware(LanguageValidatorMiddleware)
+        ]
+    )
+    
+    rdb.init_app(app)
+    
+    company_routers(app)
+    
+    return app
+
+app = create_app()
 
 
 if __name__ == "__main__":

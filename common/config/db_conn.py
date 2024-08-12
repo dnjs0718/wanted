@@ -31,20 +31,17 @@ class RDBconnect:
             self.LOCK = asyncio.Lock()
 
     def init_app(self, app: FastAPI = None, **kwargs):
-        is_test = kwargs.setdefault('TEST_MODE', False)
+        is_test = kwargs.setdefault("TEST_MODE", False)
 
         if is_test:
             register_tortoise(
                 app,
                 config=TORTOISE_ORM,
                 generate_schemas=True,
-                add_exception_handlers=True
+                add_exception_handlers=True,
             )
 
-        register_tortoise(
-            app,
-            config=TORTOISE_ORM,
-            add_exception_handlers=True
-        )
+        register_tortoise(app, config=TORTOISE_ORM, add_exception_handlers=True)
+
 
 rdb = RDBconnect()
