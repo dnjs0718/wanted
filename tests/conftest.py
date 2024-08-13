@@ -12,8 +12,6 @@ from main import create_app
 
 @pytest.fixture(scope="module")
 def client() -> Generator:
-    os.environ["API_ENV"] = "test"
-
     db_url = os.environ["TEST_DB_URL"]
 
     if os.environ["API_ENV"] != "test":
