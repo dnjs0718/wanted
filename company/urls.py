@@ -15,6 +15,6 @@ def include_routers(app: FastAPI):
     app.include_router(
         detail.router,
         tags=["회사"],
-        prefix="/companies/{company_name}",
+        prefix="/companies",
         dependencies=[Depends(LANGUAGE_HEADER)],
     )

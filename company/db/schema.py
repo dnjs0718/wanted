@@ -5,7 +5,7 @@ from common.db.schema import BaseMixin
 
 
 class Company(Model, BaseMixin):
-    name = fields.CharField(max_length=255)
+    name = fields.CharField(max_length=255, unique=True)
 
     class Meta:
         table = "companies"
